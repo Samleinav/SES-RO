@@ -30,14 +30,7 @@ En el panel de administración de Botble Laravel, ve a Plugins y activa SES Emai
 4️⃣ Configurar variables en .env
 Añade las credenciales necesarias para AWS:
 
-ini
-Copiar
-Editar
-AWS_ACCESS_KEY_ID=your-access-key
-AWS_SECRET_ACCESS_KEY=your-secret-key
-AWS_REGION=us-east-1
-AWS_S3_BUCKET=your-s3-bucket
-AWS_SNS_TOPIC=your-sns-topic
+
 ⚙️ Cómo Funciona
 📥 Recepción del correo
 Un usuario envía un correo a info@midominio.com.
@@ -49,50 +42,23 @@ SNS notifica a nuestro servidor Botble Laravel.
 Nuestro plugin recibe la notificación, descarga el correo desde S3 y lo encola en Postfix para su reenvío.
 ✉️ Reenvío sin perder el remitente original
 Manipulamos los encabezados del correo para incluir Reply-To, asegurando que si el destinatario responde, la respuesta llegue al remitente original.
+
 📌 Ejemplo de modificación de encabezado en PHP:
 
-php
-Copiar
-Editar
 protected function addHeader(string $header, string $value, $rawEmail) {
     return preg_replace('/^' . preg_quote($header, '/') . ': (.+)$/mi', $header . ': ' . $value, $rawEmail);
 }
-🛠 Uso del Plugin
+
+🛠 Uso del Plugin para Botble
+Debes crear un plugin con artisian para Botble y copiar el codigo. 
+Tambien recuerda instalar las dependencias.
 🔍 Verificación de Encabezados
 Puedes inspeccionar los encabezados en los correos procesados y asegurarte de que Reply-To esté correctamente configurado.
 
-🔄 Forzar Reenvío Manualmente
-Si un correo no fue reenviado correctamente, puedes forzar su reenvío con:
 
-sh
-Copiar
-Editar
-php artisan ses:resend email_id
 🛡 Requisitos
-✅ Laravel >= 8.x
-✅ PHP >= 7.4
+✅ Plesk 
+✅ Laravel / Botble
+✅ PHP >= 8
 ✅ AWS SES y S3 configurados
 ✅ Servidor con Postfix instalado
-
-🎯 Contribuciones
-¡Las contribuciones son bienvenidas! Si encuentras un bug o tienes una idea para mejorar el plugin, abre un issue o haz un pull request en GitHub.
-
-📜 Licencia
-Este proyecto está bajo la licencia MIT.
-
-💡 Autor: Tu Nombre
-📩 Contacto: tuemail@midominio.com
-
-yaml
-Copiar
-Editar
-
----
-
-📌 **¿Qué hace que este README sea efectivo?**  
-✅ **Estructurado y claro**, para facilitar la instalación y uso.  
-✅ **Incluye código de ejemplo** para ilustrar cómo funciona el plugin.  
-✅ **Destaca los beneficios clave** del plugin para motivar su uso.  
-✅ **Atractivo visualmente** con emojis y secciones bien organizadas.  
-
-🚀 **¡Listo para compartir en GitHub o cualquier repositorio!**
