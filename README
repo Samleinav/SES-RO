@@ -1,0 +1,98 @@
+# 📧 Botble SES Email Forwarder  
+🔄 **Plugin para reenviar correos con AWS SES sin perder el remitente original**  
+
+## 📌 Descripción  
+Este plugin para **Botble Laravel** permite gestionar el reenvío de correos utilizando **AWS SES**, evitando problemas con el remitente original gracias a la manipulación de encabezados como **Reply-To**.  
+
+✅ **Características principales:**  
+- 📩 **Recepción de correos a través de AWS SES** y almacenamiento en S3.  
+- 🔔 **Notificaciones eficientes con AWS Lambda + SNS**, evitando límites de tamaño en mensajes.  
+- 📥 **Descarga y procesamiento del correo en el servidor.**  
+- ✉️ **Reenvío inteligente con Postfix**, asegurando que las respuestas lleguen al remitente correcto.  
+- 🏗 **Integración sencilla en Botble Laravel.**  
+
+---
+
+## 🚀 **Instalación**  
+
+### 1️⃣ **Clonar el repositorio**  
+```sh
+git clone https://github.com/tuusuario/botble-ses-email-forwarder.git
+cd botble-ses-email-forwarder
+2️⃣ Copiar archivos del plugin a Botble
+sh
+Copiar
+Editar
+cp -r botble-ses-email-forwarder /platform/plugins/ses-email-forwarder
+3️⃣ Activar el plugin en Botble
+En el panel de administración de Botble Laravel, ve a Plugins y activa SES Email Forwarder.
+
+4️⃣ Configurar variables en .env
+Añade las credenciales necesarias para AWS:
+
+ini
+Copiar
+Editar
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=your-s3-bucket
+AWS_SNS_TOPIC=your-sns-topic
+⚙️ Cómo Funciona
+📥 Recepción del correo
+Un usuario envía un correo a info@midominio.com.
+AWS SES recibe el correo y lo almacena en S3.
+🔔 Notificación con AWS Lambda + SNS
+Una Lambda procesa el mensaje, eliminando información pesada y enviando solo los datos necesarios a SNS.
+SNS notifica a nuestro servidor Botble Laravel.
+📥 Descarga y encolado en Postfix
+Nuestro plugin recibe la notificación, descarga el correo desde S3 y lo encola en Postfix para su reenvío.
+✉️ Reenvío sin perder el remitente original
+Manipulamos los encabezados del correo para incluir Reply-To, asegurando que si el destinatario responde, la respuesta llegue al remitente original.
+📌 Ejemplo de modificación de encabezado en PHP:
+
+php
+Copiar
+Editar
+protected function addHeader(string $header, string $value, $rawEmail) {
+    return preg_replace('/^' . preg_quote($header, '/') . ': (.+)$/mi', $header . ': ' . $value, $rawEmail);
+}
+🛠 Uso del Plugin
+🔍 Verificación de Encabezados
+Puedes inspeccionar los encabezados en los correos procesados y asegurarte de que Reply-To esté correctamente configurado.
+
+🔄 Forzar Reenvío Manualmente
+Si un correo no fue reenviado correctamente, puedes forzar su reenvío con:
+
+sh
+Copiar
+Editar
+php artisan ses:resend email_id
+🛡 Requisitos
+✅ Laravel >= 8.x
+✅ PHP >= 7.4
+✅ AWS SES y S3 configurados
+✅ Servidor con Postfix instalado
+
+🎯 Contribuciones
+¡Las contribuciones son bienvenidas! Si encuentras un bug o tienes una idea para mejorar el plugin, abre un issue o haz un pull request en GitHub.
+
+📜 Licencia
+Este proyecto está bajo la licencia MIT.
+
+💡 Autor: Tu Nombre
+📩 Contacto: tuemail@midominio.com
+
+yaml
+Copiar
+Editar
+
+---
+
+📌 **¿Qué hace que este README sea efectivo?**  
+✅ **Estructurado y claro**, para facilitar la instalación y uso.  
+✅ **Incluye código de ejemplo** para ilustrar cómo funciona el plugin.  
+✅ **Destaca los beneficios clave** del plugin para motivar su uso.  
+✅ **Atractivo visualmente** con emojis y secciones bien organizadas.  
+
+🚀 **¡Listo para compartir en GitHub o cualquier repositorio!**
